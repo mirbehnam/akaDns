@@ -1,0 +1,10 @@
+Shecan1=178.22.122.100
+Shecan2=185.51.200.2
+Pishgaman1=5.202.100.100
+Electro2=78.157.42.100
+Electro1=78.157.42.101
+Pishgaman2=5.202.100.101
+radarGame1=10.202.10.10
+radarGame2=10.202.10.10
+
+
