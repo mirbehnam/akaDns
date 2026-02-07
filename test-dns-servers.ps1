@@ -173,8 +173,14 @@ function Test-DomainWithServers {
             Write-Host "Title indicates 403 Forbidden." -ForegroundColor Red
             $titleStatus = "403 Forbidden"
         } else {
-            Write-Host "Title check passed." -ForegroundColor Green
-            $titleStatus = "OK"
+            $titleMatch = [regex]::Match($response.Content, "<title>\s*(.*?)\s*</title>", "IgnoreCase")
+            if ($titleMatch.Success) {
+                Write-Host ("Title check passed. Title: {0}" -f $titleMatch.Groups[1].Value) -ForegroundColor Green
+                $titleStatus = $titleMatch.Groups[1].Value
+            } else {
+                Write-Host "Title check passed." -ForegroundColor Green
+                $titleStatus = "OK"
+            }
         }
     } catch {
         Write-Host "Unable to fetch page title." -ForegroundColor Yellow
