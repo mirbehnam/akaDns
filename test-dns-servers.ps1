@@ -168,6 +168,19 @@ function Test-DomainWithServers {
     try {
         $response = Invoke-WebRequest -Uri ("https://{0}" -f $Domain) -UseBasicParsing -TimeoutSec 10 -Headers @{
             "User-Agent" = "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
+            "Accept-Language" = "en-US,en;q=0.9"
+        }
+        $finalHost = $response.BaseResponse.ResponseUri.Host
+        if ($finalHost -and $finalHost -ne $Domain) {
+            Write-Host ("Request redirected to {0}." -f $finalHost) -ForegroundColor Yellow
+            $titleStatus = ("Redirected: {0}" -f $finalHost)
+            return [PSCustomObject]@{
+                Domain       = $Domain
+                DnsName      = $DnsName
+                ResolveTime  = [math]::Round($elapsed, 2)
+                TcpStatus    = $tcpStatus
+                TitleStatus  = $titleStatus
+            }
         }
         if ($response.Content -match "<title>\s*Error 403") {
             Write-Host "Title indicates 403 Forbidden." -ForegroundColor Red
@@ -175,8 +188,14 @@ function Test-DomainWithServers {
         } else {
             $titleMatch = [regex]::Match($response.Content, "<title>\s*(.*?)\s*</title>", "IgnoreCase")
             if ($titleMatch.Success) {
-                Write-Host ("Title check passed. Title: {0}" -f $titleMatch.Groups[1].Value) -ForegroundColor Green
-                $titleStatus = $titleMatch.Groups[1].Value
+                $titleText = $titleMatch.Groups[1].Value.Trim()
+                if ($titleText -match "Before you continue") {
+                    Write-Host "Title indicates consent/verification page." -ForegroundColor Yellow
+                    $titleStatus = "Consent page"
+                } else {
+                    Write-Host ("Title check passed. Title: {0}" -f $titleText) -ForegroundColor Green
+                    $titleStatus = $titleText
+                }
             } else {
                 Write-Host "Title check passed." -ForegroundColor Green
                 $titleStatus = "OK"
