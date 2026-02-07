@@ -146,7 +146,12 @@ function Test-DomainWithServers {
     }
 
     Write-Host ("DNS resolution successful via {0}." -f $DnsName) -ForegroundColor Green
-    $results | Where-Object { $_.IPAddress } | Select-Object Name, IPAddress | Format-Table -AutoSize
+    $resultText = $results |
+        Where-Object { $_.IPAddress } |
+        Select-Object Name, IPAddress |
+        Format-Table -AutoSize |
+        Out-String
+    Write-Host $resultText.Trim()
     Write-Host ("DNS lookup completed in {0} ms" -f [math]::Round($elapsed, 2))
 
     Write-Host "`nTesting TCP connectivity on port 443..." -ForegroundColor Green
@@ -161,7 +166,9 @@ function Test-DomainWithServers {
 
     Write-Host "`nChecking page title for 403..." -ForegroundColor Green
     try {
-        $response = Invoke-WebRequest -Uri ("https://{0}" -f $Domain) -UseBasicParsing -TimeoutSec 10
+        $response = Invoke-WebRequest -Uri ("https://{0}" -f $Domain) -UseBasicParsing -TimeoutSec 10 -Headers @{
+            "User-Agent" = "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
+        }
         if ($response.Content -match "<title>\s*Error 403") {
             Write-Host "Title indicates 403 Forbidden." -ForegroundColor Red
             $titleStatus = "403 Forbidden"
@@ -204,4 +211,7 @@ foreach ($domain in $selectedDomains) {
 }
 
 Write-Host "`nTest Summary" -ForegroundColor Green
-$summary | Format-Table Domain, DnsName, ResolveTime, TcpStatus, TitleStatus -AutoSize
+$summaryText = $summary |
+    Format-Table Domain, DnsName, ResolveTime, TcpStatus, TitleStatus -AutoSize |
+    Out-String
+Write-Host $summaryText.Trim()
