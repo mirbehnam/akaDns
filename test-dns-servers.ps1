@@ -99,6 +99,50 @@ if ($scopeIndex -eq 1) {
     }
 }
 
+function Assert-Administrator {
+    $isAdmin = ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole(
+        [Security.Principal.WindowsBuiltInRole] "Administrator"
+    )
+    if (-not $isAdmin) {
+        Write-Warning "Please run this script as Administrator!"
+        exit 1
+    }
+}
+
+function Set-CustomDnsServers {
+    param (
+        [string[]]$Servers
+    )
+
+    Get-NetAdapter | ForEach-Object {
+        Disable-NetAdapterBinding -Name $_.Name -ComponentID ms_tcpip6 -ErrorAction SilentlyContinue
+    }
+
+    Get-NetAdapter | Where-Object { $_.Status -eq "Up" } | ForEach-Object {
+        Set-DnsClientServerAddress -InterfaceIndex $_.ifIndex -ServerAddresses $Servers
+    }
+
+    Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters" -Name "EnableAutoDOH" -Value 0
+    Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters" -Name "QueryIpMatching" -Value 0
+    ipconfig /flushdns | Out-Null
+}
+
+function Restore-DnsServers {
+    param (
+        [hashtable]$OriginalServers
+    )
+
+    foreach ($entry in $OriginalServers.GetEnumerator()) {
+        if ($entry.Value.Reset) {
+            Set-DnsClientServerAddress -InterfaceIndex $entry.Key -ResetServerAddresses
+        } else {
+            Set-DnsClientServerAddress -InterfaceIndex $entry.Key -ServerAddresses $entry.Value.Servers
+        }
+    }
+
+    ipconfig /flushdns | Out-Null
+}
+
 function Get-DnsPairName {
     param (
         [string[]]$Servers,
@@ -119,7 +163,8 @@ function Test-DomainWithServers {
     param (
         [string]$Domain,
         [string[]]$Servers,
-        [string]$DnsName
+        [string]$DnsName,
+        [switch]$UseSystemDns
     )
 
     Write-Host "`nResolving DNS for: $Domain" -ForegroundColor Green
@@ -129,14 +174,24 @@ function Test-DomainWithServers {
     $titleStatus = "Not Checked"
     $tcpStatus = "Failed"
 
-    foreach ($server in $Servers) {
+    if ($UseSystemDns) {
         $resolveTime = Measure-Command {
-            $results = Resolve-DnsName -Name $Domain -Server $server -ErrorAction SilentlyContinue
+            $results = Resolve-DnsName -Name $Domain -ErrorAction SilentlyContinue
         }
         if ($results) {
             $success = $true
             $elapsed = $resolveTime.TotalMilliseconds
-            break
+        }
+    } else {
+        foreach ($server in $Servers) {
+            $resolveTime = Measure-Command {
+                $results = Resolve-DnsName -Name $Domain -Server $server -ErrorAction SilentlyContinue
+            }
+            if ($results) {
+                $success = $true
+                $elapsed = $resolveTime.TotalMilliseconds
+                break
+            }
         }
     }
 
@@ -226,9 +281,25 @@ foreach ($domain in $selectedDomains) {
             exit 1
         }
 
-        foreach ($pair in $dnsPairs) {
-            $summary += Test-DomainWithServers -Domain $domain -Servers $pair.Servers -DnsName $pair.Name
+        Assert-Administrator
+
+        $activeAdapters = Get-NetAdapter | Where-Object { $_.Status -eq "Up" }
+        $originalDnsMap = @{}
+        foreach ($adapter in $activeAdapters) {
+            $current = (Get-DnsClientServerAddress -InterfaceIndex $adapter.ifIndex -AddressFamily IPv4).ServerAddresses
+            $originalDnsMap[$adapter.ifIndex] = [PSCustomObject]@{
+                Servers = $current
+                Reset   = ($current.Count -eq 0)
+            }
         }
+
+        foreach ($pair in $dnsPairs) {
+            Write-Host ("`nApplying DNS pair {0} before testing..." -f $pair.Name) -ForegroundColor Cyan
+            Set-CustomDnsServers -Servers $pair.Servers
+            $summary += Test-DomainWithServers -Domain $domain -Servers $pair.Servers -DnsName $pair.Name -UseSystemDns
+        }
+
+        Restore-DnsServers -OriginalServers $originalDnsMap
     } else {
         Write-Host "Selection out of range." -ForegroundColor Red
         exit 1
