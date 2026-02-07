@@ -54,6 +54,7 @@ for ($i = 0; $i -lt $dnsPairs.Count; $i++) {
 }
 
 $selection = Read-Host "Enter the DNS pair number"
+$selectedIndex = 0
 if (-not [int]::TryParse($selection, [ref]$selectedIndex)) {
     Write-Host "Invalid selection." -ForegroundColor Red
     exit 1
