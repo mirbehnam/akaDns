@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>DNS Configuration</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #f0f2f5;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #0078d4;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #106ebe;
+        }
+        .status {
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        .success {
+            background-color: #dff6dd;
+            color: #107c10;
+        }
+        .error {
+            background-color: #fde7e9;
+            color: #c42b1c;
+        }
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .restore-button {
+            background-color: #d83b01;
+        }
+        .restore-button:hover {
+            background-color: #a42e01;
+        }
+        .aka-techno-banner {
+            text-align: center;
+            background: linear-gradient(90deg, #0078d4 0%, #00c6fb 100%);
+            color: #fff;
+            padding: 24px 10px 16px 10px;
+            border-radius: 12px 12px 0 0;
+            margin-bottom: 32px;
+            box-shadow: 0 2px 8px rgba(0,120,212,0.10);
+            font-family: 'Segoe UI', Arial, sans-serif;
+            letter-spacing: 2px;
+        }
+        .aka-techno-banner .aka-title {
+            font-size: 2.6em;
+            font-weight: bold;
+            margin-bottom: 8px;
+            text-shadow: 2px 2px 8px #005a9e55;
+        }
+        .aka-techno-banner .aka-links {
+            margin-top: 8px;
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+        }
+        .aka-techno-banner .aka-link {
+            display: inline-block;
+            padding: 6px 18px;
+            background: #fff;
+            color: #0078d4;
+            border-radius: 20px;
+            font-size: 1.1em;
+            font-weight: 500;
+            text-decoration: none;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+            transition: background 0.2s, color 0.2s;
+        }
+        .aka-techno-banner .aka-link:hover {
+            background: #0078d4;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="aka-techno-banner">
+        <div class="aka-title">aka_techno</div>
+        <div class="aka-links">
+            <a class="aka-link" href="https://www.youtube.com/@aka_techno" target="_blank">
+                &#128250; یوتیوب من
+            </a>
+            <a class="aka-link" href="https://www.instagram.com/aka_techno" target="_blank">
+                &#127748; اینستاگرام من
+            </a>
+        </div>
+        <div style="margin-top:16px; font-size:1.1em; color:#e5e5e5;">
+            Credit: <b>Behnam Tajadini</b> | <span dir="rtl" style="font-family: inherit;">بهنام تاج الدینی</span>
+        </div>
+    </div>
+    <div class="container">
+        <h1>DNS Server Configuration</h1>
+        <form id="dnsForm">
+            <div class="form-group">
+                <label for="dns1">Primary DNS Server:</label>
+                <input type="text" id="dns1" name="dns1" placeholder="e.g., 1.1.1.1" list="dnsList1" required>
+            </div>
+            <div class="form-group">
+                <label for="dns2">Secondary DNS Server:</label>
+                <input type="text" id="dns2" name="dns2" placeholder="e.g., 1.0.0.1" list="dnsList2">
+            </div>
+            <div class="form-group">
+                <label for="dns3">Tertiary DNS Server:</label>
+                <input type="text" id="dns3" name="dns3" placeholder="e.g., 8.8.8.8" list="dnsList3">
+            </div>
+            <datalist id="dnsList1"></datalist>
+            <datalist id="dnsList2"></datalist>
+            <datalist id="dnsList3"></datalist>
+            <div class="button-group">
+                <button type="submit">Apply DNS Settings</button>
+                <button type="button" class="restore-button" onclick="restoreDefaultSettings()">Restore Default Settings</button>
+            </div>
+        </form>
+        <div id="status" class="status" style="display: none;"></div>
+    </div>
+    <script>
+        // Function to fetch and display current DNS settings
+        async function loadCurrentDNS() {
+            try {
+                const response = await fetch('/current-dns');
+                const data = await response.json();
+                const dnsServers = data.dns;
+                
+                document.getElementById('dns1').value = dnsServers[0] || '';
+                document.getElementById('dns2').value = dnsServers[1] || '';
+                document.getElementById('dns3').value = dnsServers[2] || '';
+            } catch (error) {
+                console.error('Error loading current DNS:', error);
+            }
+        }
+
+        // Load current DNS settings when page loads
+        loadCurrentDNS();
+
+        // Fetch DNS configurations when page loads
+        fetch('/dns-config')
+            .then(response => response.json())
+            .then(data => {
+                const datalist1 = document.getElementById('dnsList1');
+                const datalist2 = document.getElementById('dnsList2');
+                const datalist3 = document.getElementById('dnsList3');
+                
+                data.forEach(dns => {
+                    const option = document.createElement('option');
+                    option.value = dns.ip;
+                    option.label = dns.name;
+                    datalist1.appendChild(option.cloneNode(true));
+                    datalist2.appendChild(option.cloneNode(true));
+                    datalist3.appendChild(option.cloneNode(true));
+                });
+            });
+
+        document.getElementById('dnsForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const dns1 = document.getElementById('dns1').value;
+            const dns2 = document.getElementById('dns2').value;
+            const dns3 = document.getElementById('dns3').value;
+            
+            try {
+                const response = await fetch('/set-dns', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ dns: [dns1, dns2, dns3].filter(Boolean) })
+                });
+                
+                const result = await response.json();
+                const status = document.getElementById('status');
+                status.textContent = result.message;
+                status.className = 'status ' + (result.success ? 'success' : 'error');
+                status.style.display = 'block';
+            } catch (error) {
+                const status = document.getElementById('status');
+                status.textContent = 'Error: Could not connect to the server';
+                status.className = 'status error';
+                status.style.display = 'block';
+            }
+        });
+
+        async function restoreDefaultSettings() {
+            try {
+                const response = await fetch('/restore-dns', {
+                    method: 'POST'
+                });
+                
+                const result = await response.json();
+                const status = document.getElementById('status');
+                status.textContent = result.message;
+                status.className = 'status ' + (result.success ? 'success' : 'error');
+                status.style.display = 'block';
+            } catch (error) {
+                const status = document.getElementById('status');
+                status.textContent = 'Error: Could not connect to the server';
+                status.className = 'status error';
+                status.style.display = 'block';
+            }
+        }
+    </script>
+</body>
+</html>
