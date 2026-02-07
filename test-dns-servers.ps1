@@ -126,6 +126,8 @@ function Test-DomainWithServers {
     $success = $false
     $results = @()
     $elapsed = 0
+    $titleStatus = "Not Checked"
+    $tcpStatus = "Failed"
 
     foreach ($server in $Servers) {
         $resolveTime = Measure-Command {
@@ -152,15 +154,40 @@ function Test-DomainWithServers {
 
     if ($connection.TcpTestSucceeded) {
         Write-Host "TCP connectivity successful." -ForegroundColor Green
+        $tcpStatus = "Success"
     } else {
         Write-Host "TCP connectivity failed." -ForegroundColor Yellow
     }
+
+    Write-Host "`nChecking page title for 403..." -ForegroundColor Green
+    try {
+        $response = Invoke-WebRequest -Uri ("https://{0}" -f $Domain) -UseBasicParsing -TimeoutSec 10
+        if ($response.Content -match "<title>\s*Error 403") {
+            Write-Host "Title indicates 403 Forbidden." -ForegroundColor Red
+            $titleStatus = "403 Forbidden"
+        } else {
+            Write-Host "Title check passed." -ForegroundColor Green
+            $titleStatus = "OK"
+        }
+    } catch {
+        Write-Host "Unable to fetch page title." -ForegroundColor Yellow
+        $titleStatus = "Unavailable"
+    }
+
+    return [PSCustomObject]@{
+        Domain       = $Domain
+        DnsName      = $DnsName
+        ResolveTime  = [math]::Round($elapsed, 2)
+        TcpStatus    = $tcpStatus
+        TitleStatus  = $titleStatus
+    }
 }
 
+$summary = @()
 foreach ($domain in $selectedDomains) {
     if ($scopeIndex -eq 1) {
         $dnsName = Get-DnsPairName -Servers $currentServers -Pairs $dnsPairs
-        Test-DomainWithServers -Domain $domain -Servers $currentServers -DnsName $dnsName
+        $summary += Test-DomainWithServers -Domain $domain -Servers $currentServers -DnsName $dnsName
     } elseif ($scopeIndex -eq 2) {
         if ($dnsPairs.Count -eq 0) {
             Write-Host "No DNS pairs found in configuration file." -ForegroundColor Red
@@ -168,10 +195,13 @@ foreach ($domain in $selectedDomains) {
         }
 
         foreach ($pair in $dnsPairs) {
-            Test-DomainWithServers -Domain $domain -Servers $pair.Servers -DnsName $pair.Name
+            $summary += Test-DomainWithServers -Domain $domain -Servers $pair.Servers -DnsName $pair.Name
         }
     } else {
         Write-Host "Selection out of range." -ForegroundColor Red
         exit 1
     }
 }
+
+Write-Host "`nTest Summary" -ForegroundColor Green
+$summary | Format-Table Domain, DnsName, ResolveTime, TcpStatus, TitleStatus -AutoSize
