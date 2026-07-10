@@ -1,17 +1,186 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="google-site-verification" content="GdeXpnovrvoxsed6W1yMh22CsEl59r4s-MWWzFLrq2I" />
-    <meta name="description" content="ابزار تنظیم و آزمایش DNSهای مخصوص عبور از تحریم برای ویندوز">
-    <title>akaDns - ابزار تنظیم و تست DNS</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="ابزار تنظیم آسان DNS برای دور زدن تحریم‌های برنامه‌نویسی، هوش مصنوعی و گیمینگ بدون نیاز به VPN. آموزش کامل و رابط گرافیکی ساده.">
+  <meta name="keywords" content="تنظیم DNS, دور زدن تحریم, ابزار برنامه‌نویسی, هوش مصنوعی, گیمینگ, تحریم ChatGPT, GitHub Copilot, Steam">
+  <meta name="author" content="Behnam Tajadini">
+  <meta name="robots" content="index, follow">
+  <meta name="google-site-verification" content="GdeXpnovrvoxsed6W1yMh22CsEl59r4s-MWWzFLrq2I" />
+  <meta name="og:title" content="ابزار تنظیم DNS برای عبور از تحریم‌ها">
+  <meta name="og:description" content="با این ابزار ساده، تحریم‌های برنامه‌نویسی، هوش مصنوعی و گیمینگ را با چند کلیک دور بزنید.">
+  <meta name="og:type" content="website">
+  <meta name="og:url" content="https://mirbehnam.github.io/akaDns">
+  <meta name="og:image" content="https://mirbehnam.github.io/akaDns/cover.jpg">
+  <title>ابزار تنظیم DNS برای عبور از تحریم‌ها</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
 </head>
-<body>
-    <main>
-        <h1>akaDns</h1>
-        <p>ابزار تنظیم و آزمایش DNSهای مخصوص عبور از تحریم برای ویندوز.</p>
-        <p><a href="dns-gui.html">مشاهده رابط تنظیم DNS</a></p>
-    </main>
+<body class="bg-gray-50 font-sans text-gray-900">
+  <!-- Navigation Bar -->
+  <nav class="bg-blue-600 text-white sticky top-0 z-50 shadow-md">
+    <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+      <h1 class="text-lg font-bold">ابزار DNS</h1>
+      <ul class="flex space-x-4 space-x-reverse text-sm">
+        <li><a href="#features" class="hover:text-yellow-300 transition">ویژگی‌ها</a></li>
+        <li><a href="#guide" class="hover:text-yellow-300 transition">آموزش</a></li>
+        <li><a href="#sites" class="hover:text-yellow-300 transition">سایت‌های تحریم‌شده</a></li>
+        <li><a href="#run" class="hover:text-yellow-300 transition">اجرای ابزار</a></li>
+        <li><a href="#support" class="hover:text-yellow-300 transition">حمایت</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <header class="bg-gradient-to-r from-blue-500 to-indigo-600 text-white py-12 text-center">
+    <div class="container mx-auto px-4">
+      <img src="cover.jpg" alt="کاور پروژه ابزار تنظیم DNS برای رفع تحریم‌ها" class="mx-auto mb-6 rounded-lg shadow-lg max-w-full h-auto">
+      <h1 class="text-4xl font-extrabold mb-4">🧠 ابزار تنظیم آسان DNS برای رفع تحریم ایران</h1>
+      <p class="text-lg mb-6 max-w-2xl mx-auto">
+        با چند کلیک، تحریم‌های برنامه‌نویسی، هوش مصنوعی و گیمینگ را دور بزنید — بدون نیاز به VPN!
+        این ابزار با استفاده از چندین دی ان اس تحریم شکن کار میکند و همینطور مشکل کار نکردن دی ان اس ها را رفع می کند پیشنهاد می شود حتما اموزش یوتوب را ببینید
+      </p>
+      <a href="https://github.com/mirbehnam/akaDns/archive/refs/tags/v1.zip" class="inline-block bg-yellow-400 text-gray-900 font-semibold py-2 px-6 rounded-lg hover:bg-yellow-300 hover:scale-105 transition transform" aria-label="دانلود پروژه">
+        <i class="fas fa-download mr-2"></i> دانلود پروژه
+      </a>
+    </div>
+  </header>
+
+  <div class="container mx-auto px-4 py-10 max-w-4xl">
+    <!-- Creator Info -->
+    <section class="text-center mb-10">
+      <p class="text-lg mb-2">✨ ساخته شده توسط: <a href="https://www.youtube.com/@aka_techno" class="text-blue-600 hover:underline">Behnam Tajadini</a></p>
+      <p>
+        <i class="fab fa-youtube text-red-600 mr-2"></i>
+        آموزش کامل در یوتیوب: <a href="https://www.youtube.com/watch?v=8eT6NKyRyR8" class="text-blue-600 hover:underline">مشاهده آموزش</a>
+      </p>
+    </section>
+
+    <!-- Features -->
+    <section id="features" class="mb-10">
+      <h2 class="text-2xl font-bold text-blue-600 mb-4"><i class="fas fa-rocket mr-2"></i> ویژگی‌ها</h2>
+      <div class="bg-white p-5 rounded-lg shadow-md hover:shadow-lg transition">
+        <ul class="list-disc list-inside space-y-2">
+          <li>✅ تنظیم آسان و خودکار DNSهای مخصوص دور زدن تحریم</li>
+          <li>🖥️ رابط گرافیکی (GUI) برای راحتی بیشتر</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Usage Guide -->
+    <section id="guide" class="mb-10">
+      <h2 class="text-2xl font-bold text-blue-600 mb-4"><i class="fas fa-book mr-2"></i> آموزش گام به گام</h2>
+      <div class="bg-white p-5 rounded-lg shadow-md hover:shadow-lg transition">
+        <ol class="list-decimal list-inside space-y-2">
+          <li>گزینه <code>3</code> را انتخاب کنید تا تنظیمات DNS به حالت پیش‌فرض بازگردد.</li>
+          <li>گزینه <code>1</code> را انتخاب کنید تا DNSهای هوشمند ست شوند.</li>
+          <li>از سایر گزینه‌ها برای تست، بررسی یا استفاده از نسخه گرافیکی ابزار استفاده کنید.</li>
+        </ol>
+        <p class="mt-4 font-semibold text-red-600"><i class="fas fa-exclamation-circle mr-2"></i> در صورت باز نشدن برخی سایت‌ها:</p>
+        <ul class="list-disc list-inside mt-2 space-y-1">
+          <li>مرورگر را کامل ببندید و دوباره باز کنید.</li>
+          <li>کش مرورگر را پاک کنید.</li>
+          <li>مراحل بالا را مجدد تکرار کنید.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Sanctioned Sites -->
+    <section id="sites" class="mb-10">
+      <h2 class="text-2xl font-bold text-blue-600 mb-4"><i class="fas fa-globe mr-2"></i> تعدادی از سایت‌های محبوب تحریم‌شده</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- Programming & AI -->
+        <div class="bg-white p-5 rounded-lg shadow-md hover:shadow-lg transition">
+          <h3 class="text-lg font-semibold mb-3"><i class="fas fa-code mr-2"></i> برنامه‌نویسی و هوش مصنوعی</h3>
+          <ul class="list-disc list-inside space-y-1">
+            <li><a href="https://chat.openai.com" class="text-blue-600 hover:underline">ChatGPT</a></li>
+            <li><a href="https://github.com/features/copilot" class="text-blue-600 hover:underline">GitHub Copilot</a></li>
+            <li><a href="https://openai.com" class="text-blue-600 hover:underline">OpenAI</a></li>
+            <li><a href="https://huggingface.co" class="text-blue-600 hover:underline">Hugging Face</a></li>
+            <li><a href="https://replit.com" class="text-blue-600 hover:underline">Replit</a></li>
+            <li><a href="https://codesandbox.io" class="text-blue-600 hover:underline">CodeSandbox</a></li>
+          </ul>
+        </div>
+        <!-- Engineering -->
+        <div class="bg-white p-5 rounded-lg shadow-md hover:shadow-lg transition">
+          <h3 class="text-lg font-semibold mb-3"><i class="fas fa-microchip mr-2"></i> دیتاشیت و مهندسی</h3>
+          <ul class="list-disc list-inside space-y-1">
+            <li><a href="https://www.digikey.com" class="text-blue-600 hover:underline">DigiKey</a></li>
+            <li><a href="https://www.alldatasheet.com" class="text-blue-600 hover:underline">AllDatasheet</a></li>
+            <li><a href="https://www.octopart.com" class="text-blue-600 hover:underline">Octopart</a></li>
+            <li><a href="https://www.mouser.com" class="text-blue-600 hover:underline">Mouser</a></li>
+          </ul>
+        </div>
+        <!-- Gaming -->
+        <div class="bg-white p-5 rounded-lg shadow-md hover:shadow-lg transition">
+          <h3 class="text-lg font-semibold mb-3"><i class="fas fa-gamepad mr-2"></i> گیمینگ</h3>
+          <ul class="list-disc list-inside space-y-1">
+            <li><a href="https://store.steampowered.com" class="text-blue-600 hover:underline">Steam</a></li>
+            <li><a href="https://www.epicgames.com" class="text-blue-600 hover:underline">Epic Games</a></li>
+            <li><a href="https://www.blizzard.com" class="text-blue-600 hover:underline">Battle.net</a></li>
+            <li><a href="https://www.rockstargames.com" class="text-blue-600 hover:underline">Rockstar Games</a></li>
+          </ul>
+        </div>
+        <!-- Google Services -->
+        <div class="bg-white p-5 rounded-lg shadow-md hover:shadow-lg transition">
+          <h3 class="text-lg font-semibold mb-3"><i class="fab fa-google mr-2"></i> خدمات توسعه‌دهنده گوگل</h3>
+          <ul class="list-disc list-inside space-y-1">
+            <li><a href="https://gemini.google.com" class="text-blue-600 hover:underline">Gemini</a></li>
+            <li><a href="https://developer.android.com" class="text-blue-600 hover:underline">Android Developers</a></li>
+            <li><a href="https://colab.research.google.com" class="text-blue-600 hover:underline">Google Colab</a></li>
+            <li><a href="https://makersuite.google.com" class="text-blue-600 hover:underline">Google AI Studio</a></li>
+            <li><a href="https://console.cloud.google.com" class="text-blue-600 hover:underline">Google Cloud Console</a></li>
+          </ul>
+        </div>
+      </div>
+      <p class="mt-4 text-sm bg-yellow-100 p-4 rounded-lg"><i class="fas fa-lock mr-2"></i> <strong>توجه:</strong> این ابزار برای عبور از <strong>تحریم‌ها</strong> است، نه فیلترینگ. سایت‌هایی مثل یوتیوب فیلتر هستند، نه تحریم‌شده.</p>
+    </section>
+
+    <!-- Run Instructions -->
+    <section id="run" class="mb-10">
+      <h2 class="text-2xl font-bold text-blue-600 mb-4"><i class="fas fa-terminal mr-2"></i> اجرای ابزار</h2>
+      <div class="bg-white p-5 rounded-lg shadow-md hover:shadow-lg transition">
+        <p class="mb-3">فایل <code>run-dns-scripts.bat</code> را اجرا کنید و یکی از گزینه‌های زیر را انتخاب کنید:</p>
+        <pre class="bg-gray-100 p-4 rounded-lg text-sm leading-relaxed">
+1. Set Custom DNS Servers        → تنظیم DNS هوشمند
+2. Verify DNS Settings           → بررسی وضعیت تنظیمات DNS
+3. Restore Default Settings      → بازگردانی تنظیمات پیش‌فرض
+4. Test DNS Servers with URL     → تست DNS با آدرس دلخواه
+5. Open DNS Configuration GUI    → باز کردن ابزار گرافیکی
+6. Exit                          → خروج
+        </pre>
+      </div>
+    </section>
+
+    <!-- Support -->
+    <section id="support" class="text-center mb-10">
+      <h2 class="text-2xl font-bold text-blue-600 mb-4"><i class="fas fa-heart mr-2"></i> حمایت از توسعه‌دهنده</h2>
+      <div class="bg-white p-5 rounded-lg shadow-md hover:shadow-lg transition">
+        <p class="mb-3">اگر این ابزار مفید بود، لطفاً کانال یوتیوب من را دنبال کنید:</p>
+        <a href="https://www.youtube.com/@aka_techno" class="inline-block bg-red-600 text-white font-semibold py-2 px-6 rounded-lg hover:bg-red-500 hover:scale-105 transition transform" aria-label="دنبال کردن در یوتیوب">
+          <i class="fab fa-youtube mr-2"></i> youtube.com/@aka_techno
+        </a>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="text-center py-6 text-gray-600 border-t">
+      <p>ساخته شده با <i class="fas fa-heart text-red-600"></i> توسط <a href="https://www.youtube.com/@aka_techno" class="text-blue-600 hover:underline">Behnam Tajadini</a></p>
+    </footer>
+  </div>
+
+  <!-- Smooth Scroll Script -->
+  <script>
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        document.querySelector(this.getAttribute('href')).scrollIntoView({
+          behavior: 'smooth'
+        });
+      });
+    });
+  </script>
 </body>
 </html>
