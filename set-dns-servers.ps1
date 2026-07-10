@@ -36,8 +36,8 @@ $dnsPairs = $dnsEntries |
         if ($pair.Count -ge 2) {
             [PSCustomObject]@{
                 Name      = $_.Name
-                Servers   = @($pair[0].IP, $pair[1].IP)
-                RawNames  = @($pair[0].Name, $pair[1].Name)
+                Servers   = @($pair | ForEach-Object { $_.IP })
+                RawNames  = @($pair | ForEach-Object { $_.Name })
             }
         }
     } | Where-Object { $_ -ne $null }
@@ -50,7 +50,7 @@ if ($dnsPairs.Count -eq 0) {
 Write-Host "Select a DNS configuration pair:"
 for ($i = 0; $i -lt $dnsPairs.Count; $i++) {
     $pair = $dnsPairs[$i]
-    Write-Host ("{0}. {1} ({2}, {3})" -f ($i + 1), $pair.Name, $pair.Servers[0], $pair.Servers[1])
+    Write-Host ("{0}. {1} ({2})" -f ($i + 1), $pair.Name, ($pair.Servers -join ", "))
 }
 
 $selection = Read-Host "Enter the DNS pair number"

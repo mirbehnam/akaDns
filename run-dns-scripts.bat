@@ -44,6 +44,7 @@ if "%choice%"=="3" (
 )
 if "%choice%"=="4" (
     powershell -ExecutionPolicy Bypass -File "%~dp0test-dns-servers.ps1"
+    if errorlevel 10 goto menu
     pause
     goto menu
 )
