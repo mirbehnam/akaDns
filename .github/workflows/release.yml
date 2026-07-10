@@ -1,0 +1,38 @@
+name: Create akaDns Release
+
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Create project ZIP
+        run: git archive --format=zip --output=akaDns.zip --prefix=akaDns/ HEAD
+
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: release-${{ github.run_number }}
+        run: |
+          gh release create "$RELEASE_TAG" \
+            akaDns.zip \
+            --target "$GITHUB_SHA" \
+            --title "akaDns $RELEASE_TAG" \
+            --generate-notes \
+            --latest
