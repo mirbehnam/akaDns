@@ -19,12 +19,13 @@ echo DNS Configuration Tool
 echo ====================
 echo 1. Set Custom DNS Servers
 echo 2. Verify DNS Settings
-echo 3. Restore Default Settings
+echo 3. Restore Automatic DNS and Clear Cache (quick restore)
 echo 4. Test DNS Servers with URL
 echo 5. Open DNS Configuration GUI
 echo 6. Exit
 echo.
 
+set "choice="
 set /p choice="Enter your choice (1-6): "
 
 if "%choice%"=="1" (
@@ -38,7 +39,8 @@ if "%choice%"=="2" (
     goto menu
 )
 if "%choice%"=="3" (
-    powershell -ExecutionPolicy Bypass -File "%~dp0restore-dns-settings.ps1"
+    powershell -NoProfile -ExecutionPolicy Bypass -File "%~dp0restore-dns-settings.ps1"
+    if errorlevel 1 echo DNS restore was not fully completed. Review the warnings above.
     pause
     goto menu
 )
