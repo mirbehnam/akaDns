@@ -2,8 +2,16 @@ name: Create akaDns Release
 
 on:
   push:
-    branches: ["main"]
+    tags:
+      - "v*"
+    branches:
+      - "main"
   workflow_dispatch:
+    inputs:
+      tag_name:
+        description: "Release tag (e.g. v3)"
+        required: false
+        default: ""
 
 permissions:
   contents: write
@@ -22,17 +30,30 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Determine Release Tag
+        id: vars
+        run: |
+          if [ -n "${{ github.event.inputs.tag_name }}" ]; then
+            TAG="${{ github.event.inputs.tag_name }}"
+          elif [[ "$GITHUB_REF" == refs/tags/* ]]; then
+            TAG="${GITHUB_REF#refs/tags/}"
+          else
+            TAG="v3"
+          fi
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
+
       - name: Create project ZIP
         run: git archive --format=zip --output=akaDns.zip --prefix=akaDns/ HEAD
 
-      - name: Create GitHub Release
+      - name: Create or Update GitHub Release
         env:
           GH_TOKEN: ${{ github.token }}
-          RELEASE_TAG: release-${{ github.run_number }}
+          RELEASE_TAG: ${{ steps.vars.outputs.tag }}
         run: |
           gh release create "$RELEASE_TAG" \
             akaDns.zip \
             --target "$GITHUB_SHA" \
             --title "akaDns $RELEASE_TAG" \
             --generate-notes \
-            --latest
+            --latest || \
+          gh release upload "$RELEASE_TAG" akaDns.zip --clobber

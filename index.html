@@ -38,14 +38,22 @@
   <header class="bg-gradient-to-r from-blue-500 to-indigo-600 text-white py-12 text-center">
     <div class="container mx-auto px-4">
       <img src="cover.jpg" alt="کاور پروژه ابزار تنظیم DNS برای رفع تحریم‌ها" class="mx-auto mb-6 rounded-lg shadow-lg max-w-full h-auto">
+      <div class="inline-block bg-white text-blue-700 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-4 shadow-sm">
+        نسخه جدید v3.0 منتشر شد
+      </div>
       <h1 class="text-4xl font-extrabold mb-4">🧠 ابزار تنظیم آسان DNS برای رفع تحریم ایران</h1>
       <p class="text-lg mb-6 max-w-2xl mx-auto">
         با چند کلیک، تحریم‌های برنامه‌نویسی، هوش مصنوعی و گیمینگ را دور بزنید — بدون نیاز به VPN!
-        این ابزار با استفاده از چندین دی ان اس تحریم شکن کار میکند و همینطور مشکل کار نکردن دی ان اس ها را رفع می کند پیشنهاد می شود حتما اموزش یوتوب را ببینید
+        این ابزار با استفاده از چندین دی ان اس تحریم شکن کار میکند و همینطور مشکل کار نکردن دی ان اس ها را رفع می کند پیشنهاد می شود حتما آموزش یوتیوب را ببینید.
       </p>
-      <a href="https://github.com/mirbehnam/akaDns/releases/latest/download/akaDns.zip" class="inline-block bg-yellow-400 text-gray-900 font-semibold py-2 px-6 rounded-lg hover:bg-yellow-300 hover:scale-105 transition transform" aria-label="دانلود آخرین نسخه پروژه">
-        <i class="fas fa-download mr-2"></i> دانلود پروژه
-      </a>
+      <div class="flex flex-wrap justify-center gap-4">
+        <a href="https://github.com/mirbehnam/akaDns/releases/latest/download/akaDns.zip" class="inline-block bg-yellow-400 text-gray-900 font-semibold py-2 px-6 rounded-lg hover:bg-yellow-300 hover:scale-105 transition transform shadow-md" aria-label="دانلود آخرین نسخه پروژه">
+          <i class="fas fa-download mr-2"></i> دانلود مستقیم آخرین نسخه (v3.0)
+        </a>
+        <a href="https://github.com/mirbehnam/akaDns/releases" class="inline-block bg-blue-700 bg-opacity-40 border border-white border-opacity-30 text-white font-semibold py-2 px-6 rounded-lg hover:bg-opacity-60 hover:scale-105 transition transform shadow-md" aria-label="مشاهده تمام نسخه‌ها در گیت‌هاب">
+          <i class="fab fa-github mr-2"></i> مشاهده نسخه‌ها در GitHub
+        </a>
+      </div>
     </div>
   </header>
 
@@ -63,9 +71,13 @@
     <section id="features" class="mb-10">
       <h2 class="text-2xl font-bold text-blue-600 mb-4"><i class="fas fa-rocket mr-2"></i> ویژگی‌ها</h2>
       <div class="bg-white p-5 rounded-lg shadow-md hover:shadow-lg transition">
-        <ul class="list-disc list-inside space-y-2">
-          <li>✅ تنظیم آسان و خودکار DNSهای مخصوص دور زدن تحریم</li>
-          <li>🖥️ رابط گرافیکی (GUI) برای راحتی بیشتر</li>
+        <ul class="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+          <li class="flex items-start"><i class="fas fa-check-circle text-green-500 mt-1 ml-2 flex-shrink-0"></i><span>تنظیم آسان و خودکار DNSهای بهینه ضدتحریم (شکن، الکترو، بگذر، Vanilla، Yandex و ...)</span></li>
+          <li class="flex items-start"><i class="fas fa-check-circle text-green-500 mt-1 ml-2 flex-shrink-0"></i><span>بازگردانی خودکار DNS و پاک‌سازی کش ویندوز بدون نیاز به ری‌استارت سیستم</span></li>
+          <li class="flex items-start"><i class="fas fa-check-circle text-green-500 mt-1 ml-2 flex-shrink-0"></i><span>قابلیت بازنشانی عمیق شبکه (Full Network Reset) برای رفع اختلالات حاد Winsock و TCP/IP</span></li>
+          <li class="flex items-start"><i class="fas fa-check-circle text-green-500 mt-1 ml-2 flex-shrink-0"></i><span>پشتیبان‌گیری خودکار از وضعیت شبکه قبل از ریست عمیق در مسیر <code>%LOCALAPPDATA%\akaDns\Backups</code></span></li>
+          <li class="flex items-start"><i class="fas fa-check-circle text-green-500 mt-1 ml-2 flex-shrink-0"></i><span>امکان تست و بررسی اعتبار DNSها با آدرس دلخواه در کمتر از چند ثانیه</span></li>
+          <li class="flex items-start"><i class="fas fa-check-circle text-green-500 mt-1 ml-2 flex-shrink-0"></i><span>دارای رابط گرافیکی مدرن تحت وب (GUI) و منوی متنی سریع خط فرمان</span></li>
         </ul>
       </div>
     </section>
@@ -74,11 +86,21 @@
     <section id="guide" class="mb-10">
       <h2 class="text-2xl font-bold text-blue-600 mb-4"><i class="fas fa-book mr-2"></i> آموزش گام به گام</h2>
       <div class="bg-white p-5 rounded-lg shadow-md hover:shadow-lg transition">
-        <ol class="list-decimal list-inside space-y-2">
-          <li>گزینه <code>3</code> را انتخاب کنید تا تنظیمات DNS به حالت پیش‌فرض بازگردد.</li>
-          <li>گزینه <code>1</code> را انتخاب کنید تا DNSهای هوشمند ست شوند.</li>
-          <li>از سایر گزینه‌ها برای تست، بررسی یا استفاده از نسخه گرافیکی ابزار استفاده کنید.</li>
+        <ol class="list-decimal list-inside space-y-3">
+          <li><strong>گزینه ۳:</strong> ابتدا گزینه <code>3</code> را انتخاب کنید تا تنظیمات DNS کارت‌های شبکه به حالت خودکار (DHCP) بازگردد و کش ویندوز پاک شود (مسیر سریع).</li>
+          <li><strong>گزینه ۱:</strong> سپس گزینه <code>1</code> را انتخاب کنید تا بهترین DNSهای ضدفیلتر روی سیستم ست شوند.</li>
+          <li><strong>گزینه ۲ یا ۴:</strong> با گزینه <code>2</code> وضعیت کلی یا با گزینه <code>4</code> دسترسی به آدرس دلخواه را تست و بررسی کنید.</li>
+          <li><strong>گزینه ۵:</strong> در صورت تمایل به محیط گرافیکی، گزینه <code>5</code> را برای اجرای پنل تحت وب انتخاب نمایید.</li>
         </ol>
+
+        <!-- Deep Reset Note -->
+        <div class="mt-6 p-4 bg-blue-50 border-r-4 border-blue-500 rounded-lg text-sm">
+          <p class="font-bold text-blue-900 mb-1"><i class="fas fa-tools mr-2"></i> نیاز به بازنشانی عمیق شبکه (Full Network Reset)؟</p>
+          <p class="text-blue-800 mb-2">اگر ارتباط شبکه دچار اختلال شدید شده باشد، می‌توانید در PowerShell با دسترسی Administrator دستور زیر را اجرا کنید:</p>
+          <pre class="bg-gray-900 text-green-400 p-3 rounded text-xs overflow-x-auto dir-ltr">powershell -NoProfile -ExecutionPolicy Bypass -File .\restore-dns-settings.ps1 -FullNetworkReset</pre>
+          <p class="text-gray-600 text-xs mt-2">این گزینه TCP/IP، IPv6 و Winsock را بازنشانی کرده و یک نسخه پشتیبان تشخیصی ذخیره می‌کند (پس از اجرا، سیستم را ری‌استارت کنید).</p>
+        </div>
+
         <p class="mt-4 font-semibold text-red-600"><i class="fas fa-exclamation-circle mr-2"></i> در صورت باز نشدن برخی سایت‌ها:</p>
         <ul class="list-disc list-inside mt-2 space-y-1">
           <li>مرورگر را کامل ببندید و دوباره باز کنید.</li>
@@ -97,6 +119,8 @@
           <h3 class="text-lg font-semibold mb-3"><i class="fas fa-code mr-2"></i> برنامه‌نویسی و هوش مصنوعی</h3>
           <ul class="list-disc list-inside space-y-1">
             <li><a href="https://chat.openai.com" class="text-blue-600 hover:underline">ChatGPT</a></li>
+            <li><a href="https://claude.ai" class="text-blue-600 hover:underline">Claude AI</a></li>
+            <li><a href="https://cursor.com" class="text-blue-600 hover:underline">Cursor</a></li>
             <li><a href="https://github.com/features/copilot" class="text-blue-600 hover:underline">GitHub Copilot</a></li>
             <li><a href="https://openai.com" class="text-blue-600 hover:underline">OpenAI</a></li>
             <li><a href="https://huggingface.co" class="text-blue-600 hover:underline">Hugging Face</a></li>
@@ -143,13 +167,13 @@
     <section id="run" class="mb-10">
       <h2 class="text-2xl font-bold text-blue-600 mb-4"><i class="fas fa-terminal mr-2"></i> اجرای ابزار</h2>
       <div class="bg-white p-5 rounded-lg shadow-md hover:shadow-lg transition">
-        <p class="mb-3">فایل <code>run-dns-scripts.bat</code> را اجرا کنید و یکی از گزینه‌های زیر را انتخاب کنید:</p>
-        <pre class="bg-gray-100 p-4 rounded-lg text-sm leading-relaxed">
+        <p class="mb-3">فایل <code>run-dns-scripts.bat</code> را به صورت Administrator اجرا کنید و یکی از گزینه‌های زیر را انتخاب نمایید:</p>
+        <pre class="bg-gray-100 p-4 rounded-lg text-sm leading-relaxed font-mono">
 1. Set Custom DNS Servers        → تنظیم DNS هوشمند
 2. Verify DNS Settings           → بررسی وضعیت تنظیمات DNS
-3. Restore Default Settings      → بازگردانی تنظیمات پیش‌فرض
+3. Restore Automatic DNS and Clear Cache (quick restore) → بازگردانی خودکار DNS و پاک‌سازی کش
 4. Test DNS Servers with URL     → تست DNS با آدرس دلخواه
-5. Open DNS Configuration GUI    → باز کردن ابزار گرافیکی
+5. Open DNS Configuration GUI    → باز کردن پنل گرافیکی تحت وب
 6. Exit                          → خروج
         </pre>
       </div>
